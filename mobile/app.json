@@ -2,10 +2,15 @@
   "expo": {
     "name": "VárdApp",
     "slug": "vardapp",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
-    "android": { "package": "hu.vardapp.mobile", "versionCode": 1 },
-    "plugins": ["expo-notifications"]
+    "android": {
+      "package": "hu.vardapp.mobile",
+      "versionCode": 2
+    },
+    "plugins": [
+      "expo-notifications"
+    ]
   }
 }

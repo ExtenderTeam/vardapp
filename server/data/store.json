@@ -1,0 +1,12 @@
+{
+  "users": [
+    {
+      "id": "usr_1791824764021_45e3072c",
+      "email": "anna@kisvarda.hu",
+      "passwordHash": "scrypt$16384$8$1$7d94aa0d447dadc4c62d01cfb8d15760$39ec7fad4aa991eaa73bf0efbdb352a00c51645fa5184e43b3ae2f7bf027473d",
+      "name": "Anna",
+      "createdAt": "2026-10-12T17:06:04.022Z"
+    }
+  ],
+  "notes": []
+}

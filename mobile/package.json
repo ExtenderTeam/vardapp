@@ -1,10 +1,14 @@
 {
   "name": "vardapp-mobile",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "main": "node_modules/expo/AppEntry.js",
-  "scripts": { "start": "expo start", "android": "expo run:android" },
+  "scripts": {
+    "start": "expo start",
+    "android": "expo run:android"
+  },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "2.1.2",
     "expo": "~53.0.0",
     "expo-status-bar": "~2.2.3",
     "expo-linking": "~7.1.5",
@@ -12,5 +16,7 @@
     "react": "19.0.0",
     "react-native": "0.79.5"
   },
-  "devDependencies": { "@babel/core": "^7.25.2" }
+  "devDependencies": {
+    "@babel/core": "^7.25.2"
+  }
 }
