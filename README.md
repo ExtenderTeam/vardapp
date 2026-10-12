@@ -1,4 +1,4 @@
 # VárdApp
 VárdApp: Hír, és információ app Kisvárdának
 
-(nem hivatalos)
+_(nem hivatalos)_
