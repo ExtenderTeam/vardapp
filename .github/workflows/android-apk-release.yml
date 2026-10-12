@@ -36,21 +36,18 @@ jobs:
             npm install
           fi
 
-      - name: Check Expo project
-        working-directory: mobile
-        run: npx expo-doctor || true
-
-      - name: Setup EAS CLI
-        uses: expo/expo-github-action@v8
-        with:
-          eas-version: latest
-          token: ${{ secrets.EXPO_TOKEN }}
+      - name: Install EAS CLI
+        run: npm install -g eas-cli
 
       - name: Build Android APK
         working-directory: mobile
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
         run: |
+          if [ -z "$EXPO_TOKEN" ]; then
+            echo "EXPO_TOKEN secret is missing. Add it under repo Settings → Secrets."
+            exit 1
+          fi
           eas build --platform android --profile preview --non-interactive --wait --json > ../eas-build.json
           APK_URL="$(jq -r 'if type == "array" then .[0].artifacts.buildUrl // empty else .artifacts.buildUrl // empty end' ../eas-build.json)"
           if [ -z "$APK_URL" ] || [ "$APK_URL" = "null" ]; then
