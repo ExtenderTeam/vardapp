@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>VárdApp – Hírek és információk Kisvárdának</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Public+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#eef1f1; --surface:#ffffff; --ink:#0f1e24; --muted:#4a5d65;
+  --moat:#17545e; --moat-deep:#0f3a42; --lamp:#d99a1c; --line:#cfd8da;
+  --on-moat:#eef1f1;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0c181d; --surface:#132a31; --ink:#e8eeef; --muted:#9db1b8;
+    --moat:#2b8594; --moat-deep:#0a2a31; --lamp:#f0b341; --line:#24424a;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0c181d; --surface:#132a31; --ink:#e8eeef; --muted:#9db1b8;
+  --moat:#2b8594; --moat-deep:#0a2a31; --lamp:#f0b341; --line:#24424a;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 1.0625rem/1.65 "Public Sans",system-ui,sans-serif}
+h1,h2,h3{font-family:"Bricolage Grotesque","Public Sans",system-ui,sans-serif;line-height:1.08;margin:0}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--lamp);outline-offset:3px}
+.wrap{max-width:68rem;margin:0 auto;padding:0 1.5rem}
+
+/* hero */
+.hero{background:var(--moat-deep);color:var(--on-moat);position:relative;overflow:hidden}
+.hero .wrap{padding-top:4rem;padding-bottom:0}
+.hero h1{font-weight:800;font-size:clamp(3.5rem,13vw,9rem);letter-spacing:-.03em}
+.hero p{max-width:34rem;font-size:1.25rem;margin:1.25rem 0 2rem;color:#c9d9dc}
+.btns{display:flex;gap:.75rem;flex-wrap:wrap}
+.btn{display:inline-block;padding:.8rem 1.4rem;border-radius:.4rem;font-weight:600;text-decoration:none;border:2px solid var(--lamp)}
+.btn.main{background:var(--lamp);color:#1a1405}
+.btn.alt{color:var(--on-moat)}
+.btn:hover{filter:brightness(1.1)}
+.hero .wrap{display:grid;grid-template-columns:1fr auto;column-gap:3rem;align-items:center}
+.hero .wrap>*{grid-column:1}
+.hero .wrap>.logo{grid-column:2;grid-row:1/span 3;width:clamp(12rem,28vw,22rem);height:auto}
+@media (max-width:700px){
+  .hero .wrap{grid-template-columns:1fr}
+  .hero .wrap>.logo{grid-column:1;grid-row:auto;width:14rem;margin-top:2rem}
+}
+.castle{display:block;width:100%;height:auto;margin-top:2.5rem}
+
+/* download */
+.dl{display:grid;gap:1.25rem;grid-template-columns:repeat(auto-fit,minmax(16rem,1fr));margin-top:2rem}
+.dl .card{background:var(--surface);border:2px solid var(--line);padding:1.5rem;display:flex;flex-direction:column;gap:.75rem}
+.dl h3{font-size:1.5rem}
+.dl p{margin:0;color:var(--muted)}
+.dl .btn{align-self:flex-start;margin-top:auto;color:var(--ink)}
+.dl .btn.main{color:#1a1405}
+.dl .btn[aria-disabled="true"]{opacity:.55;border-color:var(--line);background:transparent;cursor:not-allowed;filter:none}
+
+/* sections */
+section{padding:4.5rem 0}
+h2{font-weight:800;font-size:clamp(1.9rem,4.5vw,3rem);letter-spacing:-.02em;margin-bottom:1rem}
+.lead{max-width:40rem;color:var(--muted)}
+.parts{display:grid;gap:1.25rem;grid-template-columns:repeat(auto-fit,minmax(16rem,1fr));margin-top:2rem}
+.part{background:var(--surface);border-left:6px solid var(--moat);padding:1.5rem 1.5rem 1.6rem}
+.part h3{font-size:1.5rem;margin-bottom:.5rem}
+.part p{margin:0;color:var(--muted)}
+.part code{font:600 .9em ui-monospace,Menlo,monospace;color:var(--moat)}
+.band{background:var(--surface);border-block:1px solid var(--line)}
+.facts{display:grid;gap:1.5rem 3rem;grid-template-columns:repeat(auto-fit,minmax(14rem,1fr));margin-top:2rem}
+.facts dt{font-weight:600}
+.facts dd{margin:.2rem 0 0;color:var(--muted)}
+.note{border:2px dashed var(--lamp);padding:1.25rem 1.5rem;max-width:40rem;margin-top:2rem}
+footer{padding:2.5rem 0;color:var(--muted);font-size:.95rem}
+footer .wrap{display:flex;gap:1rem;justify-content:space-between;flex-wrap:wrap}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <h1>VárdApp</h1>
+    <p>Hírek és információk Kisvárdáról, egy helyen, a telefonodon.</p>
+    <div class="btns">
+      <a class="btn main" href="#letoltes">Letöltés</a>
+      <a class="btn alt" href="https://github.com/ExtenderTeam/vardapp">Projekt a GitHubon</a>
+    </div>
+    <img class="logo" src="">
+  </svg>
+</header>
+
+<main>
+  <section id="letoltes">
+    <div class="wrap">
+      <h2>Töltsd le az appot</h2>
+      <div class="dl">
+        <div class="card">
+          <h3>Android (APK)</h3>
+          <p id="apk-info">Mindig a legfrissebb kiadás nyílik meg.</p>
+          <a class="btn main" id="apk-link" href="https://github.com/ExtenderTeam/vardapp/releases/latest">APK letöltése</a>
+        </div>
+        <div class="card">
+          <h3>Google Play</h3>
+          <p id="play-info">Hamarosan elérhető a Play Áruházban.</p>
+          <a class="btn main" id="play-link" href="#letoltes" aria-disabled="true" tabindex="-1">Megnyitás a Play Áruházban</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="mi-ez">
+    <div class="wrap">
+      <h2>Kisvárda, zsebben</h2>
+      <p class="lead">A VárdApp egy hír- és információs alkalmazás a kisvárdaiaknak és a városba látogatóknak. Azért készül, hogy ami a városban történik, ne öt különböző helyen kelljen keresni.</p>
+      <div class="note"><strong>Nem hivatalos projekt.</strong> A VárdApp független fejlesztés, nem Kisvárda önkormányzatának vagy intézményeinek alkalmazása.</div>
+    </div>
+  </section>
+
+  <section class="band" id="felepites">
+    <div class="wrap">
+      <h2>Két része van</h2>
+      <p class="lead">A projekt kódja két mappára oszlik, mindkettő megtalálható a nyílt tárolóban.</p>
+      <div class="parts">
+        <article class="part">
+          <h3>Mobilalkalmazás</h3>
+          <p>A <code>mobile</code> mappa tartalmazza az alkalmazást, amit a felhasználók a telefonjukon látnak.</p>
+        </article>
+        <article class="part">
+          <h3>Szerver</h3>
+          <p>A <code>server</code> mappa a háttérrendszer, ez szolgálja ki az alkalmazást a hírekkel és az információkkal.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="nyilt">
+    <div class="wrap">
+      <h2>Nyílt forráskódú</h2>
+      <p class="lead">Bárki megnézheti, hogyan működik, és hozzászólhat a fejlesztéshez.</p>
+      <dl class="facts">
+        <div><dt>Licenc</dt><dd>Apache-2.0</dd></div>
+        <div><dt>Fejlesztő</dt><dd>ExtenderTeam</dd></div>
+        <div><dt>Forráskód</dt><dd><a href="https://github.com/ExtenderTeam/vardapp">github.com/ExtenderTeam/vardapp</a></dd></div>
+      </dl>
+      <div class="btns" style="margin-top:2rem">
+        <a class="btn main" href="https://github.com/ExtenderTeam/vardapp">Forráskód megnyitása</a>
+        <a class="btn alt" style="color:var(--ink)" href="https://github.com/ExtenderTeam/vardapp/issues">Hibabejelentés, ötlet</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>VárdApp – nem hivatalos Kisvárda-app</span>
+    <span>Apache-2.0 licenc · ExtenderTeam</span>
+  </div>
+</footer>
+
+<script>
+/* Ide másold a Play Áruház linkjét, pl. "https://play.google.com/store/apps/details?id=..." */
+var PLAY_STORE_URL = "";
+
+(function () {
+  var REPO = "ExtenderTeam/vardapp";
+  var MAX_AGE = 3 * 60 * 60 * 1000; // 3 óra
+  var KEY = "vardapp-release";
+  var apkLink = document.getElementById("apk-link");
+  var apkInfo = document.getElementById("apk-info");
+
+  var play = document.getElementById("play-link");
+  if (PLAY_STORE_URL) {
+    play.href = PLAY_STORE_URL;
+    play.removeAttribute("aria-disabled");
+    play.removeAttribute("tabindex");
+    document.getElementById("play-info").textContent = "Telepítsd a Google Play Áruházból.";
+  } else {
+    play.addEventListener("click", function (e) { e.preventDefault(); });
+  }
+
+  function apply(rel) {
+    if (!rel || !rel.assets) return;
+    var apk = rel.assets.filter(function (a) { return /\.apk$/i.test(a.name); })[0];
+    if (!apk) return;
+    apkLink.href = apk.browser_download_url;
+    var d = rel.published_at ? new Date(rel.published_at).toLocaleDateString("hu-HU") : "";
+    apkInfo.textContent = "Legfrissebb verzió: " + (rel.tag_name || rel.name || "") + (d ? " (" + d + ")" : "");
+  }
+
+  function readCache() {
+    try { return JSON.parse(localStorage.getItem(KEY)); } catch (e) { return null; }
+  }
+
+  function refresh() {
+    var c = readCache();
+    if (c && Date.now() - c.t < MAX_AGE) { apply(c.rel); return; }
+    fetch("https://api.github.com/repos/" + REPO + "/releases/latest")
+      .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+      .then(function (rel) {
+        apply(rel);
+        try { localStorage.setItem(KEY, JSON.stringify({ t: Date.now(), rel: rel })); } catch (e) {}
+      })
+      .catch(function () { if (c) apply(c.rel); });
+  }
+
+  refresh();
+  setInterval(refresh, MAX_AGE);
+})();
+</script>
+</body>
+</html>
