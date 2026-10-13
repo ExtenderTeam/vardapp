@@ -1,11 +1,11 @@
 const DEFAULT_API =
   localStorage.getItem("vardapp_api") ||
   "https://szonscraperapi.netlify.app".includes("unused")
-    ? "http://localhost:3000"
-    : "http://localhost:3000";
+    ? "http://vardapp.onrender.com"
+    : "http://vardapp.onrender.com";
 
 const state = {
-  api: localStorage.getItem("vardapp_api") || "http://localhost:3000",
+  api: localStorage.getItem("vardapp_api") || "http://vardapp.onrender.com",
   token: localStorage.getItem("vardapp_token") || "",
   profile: null,
   newsSource: "kisvarda",
