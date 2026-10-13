@@ -1,0 +1,1 @@
+window.VARDAPP_DEFAULT_API = "https://vardapp.onrender.com";

@@ -1,11 +1,24 @@
-const DEFAULT_API =
-  localStorage.getItem("vardapp_api") ||
-  "https://szonscraperapi.netlify.app".includes("unused")
-    ? "http://vardapp.onrender.com"
-    : "http://vardapp.onrender.com";
+function resolveApiBase() {
+  const params = new URLSearchParams(location.search);
+  if (params.get("api")) {
+    const u = params.get("api").replace(/\/$/, "");
+    localStorage.setItem("vardapp_api", u);
+    return u;
+  }
+  const saved = localStorage.getItem("vardapp_api");
+  if (saved) return saved.replace(/\/$/, "");
+  const fromConfig = (typeof window !== "undefined" && window.VARDAPP_DEFAULT_API) || "";
+  if (fromConfig) return String(fromConfig).replace(/\/$/, "");
+  if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
+    return "http://localhost:3000";
+  }
+  // GitHub Pages / éles: nincs default → a felhasználó az Egyéb fülön adja meg,
+  // vagy töltsd ki a config.js VARDAPP_DEFAULT_API mezőt (https Render URL).
+  return "";
+}
 
 const state = {
-  api: localStorage.getItem("vardapp_api") || "http://vardapp.onrender.com",
+  api: resolveApiBase(),
   token: localStorage.getItem("vardapp_token") || "",
   profile: null,
   newsSource: "kisvarda",
@@ -38,18 +51,27 @@ async function api(path, opts = {}) {
   const headers = { Accept: "application/json", ...(opts.headers || {}) };
   if (opts.body && !headers["Content-Type"]) headers["Content-Type"] = "application/json";
   if (state.token) headers.Authorization = `Bearer ${state.token}`;
-  const res = await fetch(`${state.api.replace(/\/$/, "")}${path}`, {
-    ...opts,
-    headers
-  });
-  let body = null;
+  const url = `${state.api.replace(/\/$/, "")}${path}`;
+  let res;
   try {
-    body = await res.json();
+    res = await fetch(url, { ...opts, headers, mode: "cors" });
+  } catch (networkErr) {
+    const err = new Error(
+      `Hálózati hiba (${url}). CORS, rossz API URL, vagy a szerver nem fut. ` +
+        (networkErr.message || "")
+    );
+    err.cause = networkErr;
+    throw err;
+  }
+  let body = null;
+  const text = await res.text();
+  try {
+    body = text ? JSON.parse(text) : null;
   } catch {
     body = null;
   }
   if (!res.ok) {
-    const err = new Error(body?.error || `HTTP ${res.status}`);
+    const err = new Error(body?.error || body?.detail || `HTTP ${res.status}`);
     err.status = res.status;
     err.body = body;
     throw err;

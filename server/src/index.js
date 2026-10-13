@@ -17,8 +17,21 @@ import {
 initDb();
 
 const app = express();
-app.use(helmet());
-app.use(cors());
+// crossOriginResourcePolicy: same-origin blokkolná a webes klienst másik domainről
+app.use(
+  helmet({
+    crossOriginResourcePolicy: { policy: "cross-origin" },
+    contentSecurityPolicy: false
+  })
+);
+app.use(
+  cors({
+    origin: true,
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "Accept"]
+  })
+);
 app.use(express.json({ limit: "1mb" }));
 
 app.get("/api/health", (_req, res) =>
