@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#15513F" />
+  <meta name="description" content="VárdApp – Kisvárda és Szabolcs hírek, naptár, névnap, jegyzetek" />
+  <title>VárdApp</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="app">
+    <header class="top">
+      <div class="brand">
+        <span class="logo">V</span>
+        <div>
+          <h1>VárdApp</h1>
+          <p id="greeting" class="greeting">…</p>
+        </div>
+      </div>
+      <button type="button" id="btn-auth" class="btn ghost">Belépés</button>
+    </header>
+
+    <nav class="tabs" role="tablist">
+      <button type="button" class="tab active" data-tab="news">📰 Hírek</button>
+      <button type="button" class="tab" data-tab="calendar">📅 Naptár</button>
+      <button type="button" class="tab" data-tab="notes">📝 Jegyzetek</button>
+      <button type="button" class="tab" data-tab="more">⋯ Egyéb</button>
+    </nav>
+
+    <main>
+      <!-- Hírek -->
+      <section id="panel-news" class="panel active">
+        <div class="source-bar">
+          <button type="button" class="source active" data-source="kisvarda">Kisvárda</button>
+          <button type="button" class="source" data-source="szon">Szabolcs (SZON)</button>
+        </div>
+        <div class="section-head">
+          <div>
+            <h2 id="news-title">Friss hírek</h2>
+            <p id="news-sub" class="muted">Forrás: kisvarda.hu</p>
+          </div>
+          <span id="news-meta" class="meta"></span>
+        </div>
+        <div id="news-error" class="error hidden"></div>
+        <div id="news-loading" class="loading">Betöltés…</div>
+        <div id="news-list" class="cards"></div>
+      </section>
+
+      <!-- Naptár -->
+      <section id="panel-calendar" class="panel">
+        <div class="cal-nav">
+          <button type="button" id="cal-prev" class="btn icon">‹</button>
+          <h2 id="cal-month">—</h2>
+          <button type="button" id="cal-next" class="btn icon">›</button>
+        </div>
+        <div class="cal-weekdays" id="cal-weekdays"></div>
+        <div class="cal-grid" id="cal-grid"></div>
+        <div class="nevnap-box" id="nevnap-box">
+          <h3>Névnap</h3>
+          <p id="nevnap-main">—</p>
+          <p id="nevnap-other" class="muted"></p>
+        </div>
+      </section>
+
+      <!-- Jegyzetek -->
+      <section id="panel-notes" class="panel">
+        <div class="section-head">
+          <h2>Jegyzetek</h2>
+          <button type="button" id="btn-new-note" class="btn primary" disabled>+ Új</button>
+        </div>
+        <p id="notes-hint" class="muted">Jelentkezz be a jegyzetek szinkronizálásához.</p>
+        <div id="notes-list" class="cards"></div>
+      </section>
+
+      <!-- Egyéb -->
+      <section id="panel-more" class="panel">
+        <div class="card">
+          <h3>Profil</h3>
+          <p id="profile-line" class="muted">Nincs bejelentkezve</p>
+          <button type="button" id="btn-logout" class="btn ghost hidden">Kijelentkezés</button>
+        </div>
+        <div class="card">
+          <h3>API</h3>
+          <p class="muted small">A webes kliens a VárdApp szervert hívja.</p>
+          <label class="field">
+            <span>API URL</span>
+            <input type="url" id="api-url" placeholder="https://…" />
+          </label>
+          <button type="button" id="btn-save-api" class="btn primary">Mentés</button>
+          <p id="api-status" class="meta"></p>
+        </div>
+        <div class="card">
+          <h3>Források</h3>
+          <ul class="links">
+            <li><a href="https://www.kisvarda.hu/hirek/" target="_blank" rel="noopener">kisvarda.hu hírek</a></li>
+            <li><a href="https://www.szon.hu/" target="_blank" rel="noopener">szon.hu</a></li>
+          </ul>
+        </div>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <span>VárdApp · Kisvárda</span>
+    </footer>
+  </div>
+
+  <!-- Auth modal -->
+  <dialog id="auth-modal">
+    <form method="dialog" id="auth-form">
+      <h2 id="auth-title">Belépés</h2>
+      <p class="muted small">Opcionális – a jegyzetekhez kell.</p>
+      <label class="field"><span>Név</span><input id="auth-name" name="name" autocomplete="name" /></label>
+      <label class="field"><span>E-mail</span><input id="auth-email" type="email" required autocomplete="email" /></label>
+      <label class="field"><span>Jelszó</span><input id="auth-password" type="password" required minlength="6" autocomplete="current-password" /></label>
+      <p id="auth-error" class="error hidden"></p>
+      <div class="row">
+        <button type="button" id="auth-toggle" class="btn ghost">Regisztráció</button>
+        <button type="submit" class="btn primary" id="auth-submit">Belépés</button>
+      </div>
+      <button type="button" class="btn text" id="auth-close">Bezárás</button>
+    </form>
+  </dialog>
+
+  <!-- Note modal -->
+  <dialog id="note-modal">
+    <form method="dialog" id="note-form">
+      <h2 id="note-title">Új jegyzet</h2>
+      <label class="field"><span>Cím</span><input id="note-title-input" required maxlength="200" /></label>
+      <label class="field"><span>Szöveg</span><textarea id="note-body" rows="6" maxlength="8000"></textarea></label>
+      <p id="note-error" class="error hidden"></p>
+      <div class="row">
+        <button type="button" id="note-delete" class="btn danger hidden">Törlés</button>
+        <button type="submit" class="btn primary">Mentés</button>
+      </div>
+      <button type="button" class="btn text" id="note-close">Bezárás</button>
+    </form>
+  </dialog>
+
+  <script src="app.js" type="module"></script>
+</body>
+</html>
